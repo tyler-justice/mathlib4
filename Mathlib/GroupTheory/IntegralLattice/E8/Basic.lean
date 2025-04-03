@@ -5,10 +5,14 @@ Authors: Erik van der Plas
 2025-02-26 10:09:13
 E8 格子のために借用
 -/
+
 import Mathlib.GroupTheory.IntegralLattice.Equiv
 import Mathlib.LinearAlgebra.Dimension.Finrank
 import Mathlib.LinearAlgebra.Matrix.BilinearForm
 import Mathlib.Algebra.Lie.CartanMatrix
+import Mathlib.LinearAlgebra.Matrix.Determinant
+import Mathlib.Data.Finset.Basic
+import Mathlib.Data.Fintype.Basic
 
 
 universe u
@@ -34,6 +38,25 @@ theorem unique (Λ₁ Λ₂ : Type*) [E8Lattice Λ₁] [E8Lattice Λ₂]:
 
 
 def B := Matrix.toBilin' CartanMatrix.E₈
+
+open Matrix Finset
+
+-- set_option maxRecDepth 10000
+
+lemma E8det : CartanMatrix.E₈.det = 1 := by
+  -- The determinant of the Cartan matrix of type E₈ is a known result.
+  rw [CartanMatrix.E₈]
+  rw [det_apply']
+  refine (Finset.sum_eq_single 1 ?_ ?_).trans ?_
+
+
+#eval CartanMatrix.E₈
+#eval CartanMatrix.E₈.updateRow 0 (CartanMatrix.E₈ 2 + CartanMatrix.E₈ 0)
+
+--  simp [Matrix.vecCons_const]
+
+
+
 
 
 instance exampleE8 : E8Lattice (Fin 8 → ℤ) where

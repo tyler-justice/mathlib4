@@ -12,25 +12,24 @@ def H := !![(0:ℤ), (1:ℤ);(1:ℤ), (0:ℤ)] -- 2x2行列
 
 def B := Matrix.toBilin' H
 
+
+#eval (H 0 0)*(H 1 1) - (H 1 0)*(H 0 1)
+
+-- set_option trace.Meta.Tactic.simp true
+
 theorem is_even (x : R2) : ∃ (n : ℤ), B x x = 2*n := by
   use x 0 * x 1
   rw [B]
   rw [Matrix.toBilin'_apply H x x]
   simp
-  ring_nf
-  have aux1 : H 0 0 = 0 := by rfl
-  have aux2 : H 1 1 = 0 := by rfl
-  have aux3 : H 0 1 = 1 := by rfl
-  have aux4 : H 1 0 = 1 := by rfl
-  rw [aux1, aux2,aux3,aux4]
-  ring_nf
+  calc
+    _ = x 0 * 0 * x 0 + x 0 * 1 * x 1 + (x 1 * 1 * x 0 + x 1 * 0 * x 1) 
+        :=  rfl 
+    _ = x 0 * x 1 + (x 1 * x 0) := by ring_nf 
+    _  = 2 * (x 0 * x 1) := by ring
+
 
 theorem unimodular : (det H = -1) ∨ (det H = 1):= by
   left
   rw [det_fin_two]
-  have aux1 : H 0 0 = 0 := by rfl
-  have aux2 : H 1 1 = 0 := by rfl
-  have aux3 : H 0 1 = 1 := by rfl
-  have aux4 : H 1 0 = 1 := by rfl
-  rw [aux1, aux2,aux3,aux4]
-  ring_nf
+  exact rfl 
