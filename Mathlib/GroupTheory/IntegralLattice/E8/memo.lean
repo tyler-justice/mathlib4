@@ -22,6 +22,9 @@ theorem isSymm_add_transpose_self [AddCommSemigroup α] (A : Matrix n n α)
 
 
 #check ![1,2,3,4,5,6,7,8]
+#eval ![1,2,3,4,5,6,7,8] 4
+
+#check Matrix.det_succ_row
 
 
 def B := Matrix.toBilin' CartanMatrix.E₈
@@ -33,6 +36,49 @@ example : AddCommGroup (Fin 8 → ℤ) := by exact Pi.addCommGroup
 
 #check Inner
 
+#eval CartanMatrix.E₈ 0 3
+
+#eval submatrix CartanMatrix.E₈ (Fin.succAbove 0)  (Fin.succAbove 0)
+
+#check Fin.sum_univ_succ
+
+lemma Unimodular : det CartanMatrix.E₈ = 1 := by
+  rw [det_succ_row CartanMatrix.E₈ 0]
+  rw [Fin.sum_univ_eight]
+  have E00 : CartanMatrix.E₈ 0 0 = 2 := by rfl
+  nth_rw 1 [E00]
+  have E01 : CartanMatrix.E₈ 0 1 = 0 := by rfl
+  rw [E01, mul_zero, zero_mul, add_zero]
+  have E02 : CartanMatrix.E₈ 0 2 = -1 := by rfl
+  rw [E02]
+  have E03 : CartanMatrix.E₈ 0 3 = 0 := by rfl
+  rw [E03]
+  rw [mul_zero]
+  rw [zero_mul]
+  rw [add_zero]
+  have E04 : CartanMatrix.E₈ 0 4 = 0 := by rfl
+  rw [E04]
+  rw [mul_zero]
+  rw [zero_mul]
+  rw [add_zero]
+  have E05 : CartanMatrix.E₈ 0 5 = 0 := by rfl
+  rw [E05, mul_zero, zero_mul, add_zero]
+  have E06 : CartanMatrix.E₈ 0 6 = 0 := by rfl
+  rw [E06, mul_zero, zero_mul, add_zero]
+  have E07 : CartanMatrix.E₈ 0 7 = 0 := by rfl
+  rw [E07, mul_zero, zero_mul, add_zero]
+  simp [CartanMatrix.E₈]
+  rw [submatrix CartanMatrix.E₈ (Fin.succAbove 0)  (Fin.succAbove 0)]
+
+
+
+
+
+
+
+
+
+#check det_succ_row CartanMatrix.E₈ 0
 
 instance : IntegralLattice (Fin 8 → ℤ) where
   inner := fun x y => B x y
